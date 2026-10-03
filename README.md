@@ -7,7 +7,7 @@
 
 <!-- badges: end -->
 
-The goal of RiksbankenAPIProject is to …
+This package is used to get data from Riksbanken for statistical analysis, and much more!
 
 ## Installation
 
