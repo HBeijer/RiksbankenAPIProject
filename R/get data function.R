@@ -12,7 +12,8 @@ riksbanken_serie <- function(ts){
     req_user_agent("732A94 lab") |>
     req_perform()
 
-  status <- print(resp_status(resp))
+  print(resp_status(resp))
+  print(resp_content_type(resp))
 
   data <- resp_body_json(resp)
 
