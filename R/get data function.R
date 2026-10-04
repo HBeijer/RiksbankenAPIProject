@@ -6,6 +6,8 @@ riksbanken_serie <- function(ts){
       "v1",
       "Observations",
       ts,
+      # The two lines below is meant to be able to extract ALL the data, even if the
+      # data base is updated, I want to be able to scrap it.
       "1900-01-01",
       as.character(Sys.Date())
     ) |>
@@ -13,6 +15,7 @@ riksbanken_serie <- function(ts){
     req_perform()
 
   data <- resp_body_json(resp)
+
 
   df <- do.call(rbind, lapply(data, as.data.frame))
 
