@@ -1,72 +1,26 @@
 available_series <- function(){
 
-  data.frame(
-    series_id = c(
-      "SECBREPOEFF",
-      "SECBDEPOEFF",
-      "SECBLENDEFF",
-      "SECBREFEFF",
-      "SEKEURPMI",
-      "SEKUSDPMI",
-      "SEKNOKPMI",
-      "SEKGBPPMI",
-      "SEKJPYPMI",
-      "SEKCHFPMI",
-      "SEKDKKPMI",
-      "SEKPLNPMI",
-      "SEKCNYPMI",
-      "SEKCADPMI",
-      "SEKAUDPMI",
-      "SEGVB2YC",
-      "SEGVB5YC",
-      "SEGVB7YC",
-      "SEGVB10YC",
-      "USGVB5Y",
-      "USGVB10Y",
-      "DEGVB5Y",
-      "DEGVB10Y",
-      "GBGVB5Y",
-      "GBGVB10Y",
-      "NOGVB10Y",
-      "DKGVB10Y",
-      "FIGVB10Y",
-      "SEKKIX92",
-      "SEKTCW92",
-      "SEKSDR"
-    ),
+  resp <- httr2::request("https://api.riksbank.se") |>
+    httr2::req_url_path(
+      "swea",
+      "v1",
+      "Series"
+    ) |>
+    httr2::req_user_agent("732A94 lab") |>
+    httr2::req_perform()
 
-    description = c(
-      "Riksbankens styrränta",
-      "Riksbankens inlåningsränta",
-      "Riksbankens utlåningsränta",
-      "Riksbankens referensränta",
-      "Euro mot svenska kronor",
-      "Amerikansk dollar mot svenska kronor",
-      "Norsk krona mot svenska kronor",
-      "Brittiskt pund mot svenska kronor",
-      "Japansk yen mot svenska kronor",
-      "Schweizisk franc mot svenska kronor",
-      "Dansk krona mot svenska kronor",
-      "Polsk zloty mot svenska kronor",
-      "Kinesisk yuan mot svenska kronor",
-      "Kanadensisk dollar mot svenska kronor",
-      "Australisk dollar mot svenska kronor",
-      "Svensk statsobligation, 2 år",
-      "Svensk statsobligation, 5 år",
-      "Svensk statsobligation, 7 år",
-      "Svensk statsobligation, 10 år",
-      "USA:s 5-åriga statsobligationsränta",
-      "USA:s 10-åriga statsobligationsränta",
-      "Tysklands 5-åriga statsobligationsränta",
-      "Tysklands 10-åriga statsobligationsränta",
-      "Storbritanniens 5-åriga statsobligationsränta",
-      "Storbritanniens 10-åriga statsobligationsränta",
-      "Norges 10-åriga statsobligationsränta",
-      "Danmarks 10-åriga statsobligationsränta",
-      "Finlands 10-åriga statsobligationsränta",
-      "KIX-index för svenska kronan",
-      "Historiskt TCW-index för svenska kronan",
-      "SEK mot IMF:s särskilda dragningsrätter, SDR"
-    )
+  data <- httr2::resp_body_json(resp)
+
+  df <- do.call(
+    rbind,
+    lapply(data, as.data.frame)
   )
+
+  result <- data.frame(
+    series_id = df$seriesId,
+    description = df$shortDescription,
+    row.names = NULL
+  )
+
+  return(result)
 }
