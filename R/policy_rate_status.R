@@ -41,6 +41,7 @@ policy_rate_status <- function(ts = "SECBREFEFF") {
 
   # PRINT THE RESULT
   cat(
+    "Current Information on the Swedish Policy Rate:","%\n",
     "Current policy rate is:", current_rate, "%\n",
     "The Last change in policy was in:", as.character(latest$date), "\n",
     "The policy rate has", direction,
