@@ -1,7 +1,7 @@
 riksbanken_serie <- function(ts){
 
-  resp <- request("https://api.riksbank.se") |>
-    req_url_path(
+  resp <- httr2::request("https://api.riksbank.se") |>
+    httr2::req_url_path(
       "swea",
       "v1",
       "Observations",
@@ -11,10 +11,10 @@ riksbanken_serie <- function(ts){
       "1900-01-01",
       as.character(Sys.Date())
     ) |>
-    req_user_agent("732A94 lab") |>
-    req_perform()
+    httr2::req_user_agent("732A94 lab") |>
+    httr2::req_perform()
 
-  data <- resp_body_json(resp)
+  data <- httr2::resp_body_json(resp)
 
 
   df <- do.call(rbind, lapply(data, as.data.frame))
