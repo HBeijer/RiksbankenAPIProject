@@ -1,0 +1,83 @@
+---
+title: "Using the Riksbanken API"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using the Riksbanken API}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(RiksbankenAPIProject)
+```
+
+## Introduction
+
+RiksbankenAPIProject retrieves interest rate and exchange rate data from the Riksbank SWEA API.
+
+This tutorial shows how to find an available series and download its observations. An internet connection is required to run these examples.
+
+## Find available series
+Use `available_series()` to retrieve a table of series identifiers and their descriptions.
+
+```{r available-series}
+series <- available_series()
+head(series)
+```
+
+The table contains two columns:
+
+- `series_id`: the identifier used when downloading observations.
+- `description`: a short description of the series.
+
+For this example, we use the Swedish policy rate, identified by `SECBREPOEFF`. We can find its description in the table:
+
+```{r select-series}
+series[series$series_id == "SECBREPOEFF", ]
+```
+
+## Download observations
+Use `riksbanken_serie()` to download observations for a series and a specified date interval.
+
+Here, we retrieve the policy rate during September 2026:
+
+```{r download-observations}
+observations <- riksbanken_serie(
+  ts = "SECBREPOEFF",
+  from = "2026-09-01",
+  to = "2026-09-30"
+)
+
+head(observations)
+```
+
+The arguments are:
+
+- `ts`: the series identifier.
+- `from`: the start date.
+- `to`: the end date.
+
+Dates can be supplied as character strings in `YYYY-MM-DD` format or as R `Date` objects. The start date must not be later than the end date.
+
+If dates are omitted, `from` defaults to `"1900-01-01"` and `to` defaults to the current date.
+
+## Inspect the result
+
+The function returns a data frame containing a `date` column of class `Date` and a numeric `value` column.
+
+We can inspect the column types and count the observations:
+```{r inspect-observations}
+str(observations)
+nrow(observations)
+```
+
+If the API successfully returns no observations, the function returns a data frame with zero rows and the same column types.
+
+Invalid inputs produce an error explaining which requirement was not met. HTTP errors from the API also stop the function.
