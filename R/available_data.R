@@ -1,26 +1,23 @@
 available_series <- function(){
 
   resp <- httr2::request("https://api.riksbank.se") |>
-    httr2::req_url_path(
-      "swea",
-      "v1",
-      "Series"
-    ) |>
+    httr2::req_url_path("swea", "v1", "Series") |>
     httr2::req_user_agent("732A94 lab") |>
     httr2::req_perform()
 
   data <- httr2::resp_body_json(resp)
 
-  df <- do.call(
-    rbind,
-    lapply(data, as.data.frame)
-  )
+  # Return a correctly structured table when there are no records.
+  if (length(data) == 0L) return(data.frame(series_id = character(), description = character()))
 
-  result <- data.frame(
-    series_id = df$seriesId,
-    description = df$shortDescription,
-    row.names = NULL
-  )
+  df <- do.call(rbind, lapply(data, as.data.frame))
+  stopifnot("API response is missing required fields" = all(c("seriesId", "shortDescription") %in% names(df)))
+
+  # Select and rename the columns users need.
+  result <- data.frame(series_id = df$seriesId,
+                       description = df$shortDescription,
+                       row.names = NULL)
 
   return(result)
 }
+
