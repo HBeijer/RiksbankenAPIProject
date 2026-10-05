@@ -5,9 +5,11 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/HBeijer/RiksbankenAPIProject/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/HBeijer/RiksbankenAPIProject/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-This package is used to get data from Riksbanken for statistical analysis, and much more!
+This package is used to get data from Riksbanken for statistical
+analysis, and much more!
 
 ## Installation
 
