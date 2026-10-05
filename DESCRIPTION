@@ -16,4 +16,5 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/HBeijer/RiksbankenAPIProject
 BugReports: https://github.com/HBeijer/RiksbankenAPIProject/issues
-Imports: httr2
+Imports: 
+  httr2
