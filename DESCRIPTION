@@ -18,3 +18,4 @@ URL: https://github.com/HBeijer/RiksbankenAPIProject
 BugReports: https://github.com/HBeijer/RiksbankenAPIProject/issues
 Imports: 
   httr2
+  ggplot2
