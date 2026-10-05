@@ -2,14 +2,12 @@
 output: github_document
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- README.md is generated from README.Rmd. Please edit README.Rmd. -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
+  comment = "#>"
 )
 ```
 
@@ -19,38 +17,83 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/HBeijer/RiksbankenAPIProject/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/HBeijer/RiksbankenAPIProject/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-This package is used to get data from Riksbanken for statistical analysis, and much more!
+RiksbankenAPIProject retrieves interest rate and exchange rate data
+from the Riksbank SWEA API.
+
+The package provides functions to:
+
+- List available series and their descriptions.
+- Download observations for a selected series and date interval.
+
+An internet connection is required to retrieve data.
+The package requires R version 4.1.0 or newer.
 
 ## Installation
 
-You can install the development version of RiksbankenAPIProject from [GitHub](https://github.com/) with:
+Install the package from GitHub. Setting `build_vignettes = TRUE`
+includes the tutorial in the installed package.
 
-``` r
-# install.packages("pak")
-pak::pak("HBeijer/RiksbankenAPIProject")
+```{r installation, eval = FALSE}
+# install.packages("remotes")
+
+remotes::install_github(
+  "HBeijer/RiksbankenAPIProject",
+  build_vignettes = TRUE
+)
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Load the package and find available series:
 
-```{r example}
+```{r available-series}
 library(RiksbankenAPIProject)
-## basic example code
+
+series <- available_series()
+head(series)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+The returned table contains `series_id` and `description`.
+Use a series identifier to download its observations.
 
-```{r cars}
-summary(cars)
+For example, retrieve the Swedish policy rate (`SECBREPOEFF`)
+during September 2026:
+
+```{r observations}
+observations <- riksbanken_serie(
+  ts = "SECBREPOEFF",
+  from = "2026-09-01",
+  to = "2026-09-30"
+)
+
+head(observations)
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
+The result is a data frame containing a `date` column of class `Date`
+and a numeric `value` column.
 
-You can also embed plots, for example:
+Dates can be supplied as character strings in `YYYY-MM-DD` format
+or as `Date` objects.
 
-```{r pressure, echo = FALSE}
-plot(pressure)
+## Documentation
+
+Open the help pages for the functions:
+
+```{r function-help, eval = FALSE}
+?available_series
+?riksbanken_serie
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+For a tutorial with explanations and examples, open the vignette:
+
+```{r vignette-help, eval = FALSE}
+browseVignettes(package = "RiksbankenAPIProject")
+```
+
+## Authors
+
+Thai Pham and Hampus Beijer.
+
+## License
+
+MIT. See [LICENSE.md](LICENSE.md) for details.

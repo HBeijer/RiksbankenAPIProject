@@ -1,5 +1,5 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- README.md is generated from README.Rmd. Please edit README.Rmd. -->
 
 # RiksbankenAPIProject
 
@@ -8,48 +8,97 @@
 [![R-CMD-check](https://github.com/HBeijer/RiksbankenAPIProject/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/HBeijer/RiksbankenAPIProject/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-This package is used to get data from Riksbanken for statistical
-analysis, and much more!
+RiksbankenAPIProject retrieves interest rate and exchange rate data from
+the Riksbank SWEA API.
+
+The package provides functions to:
+
+- List available series and their descriptions.
+- Download observations for a selected series and date interval.
+
+An internet connection is required to retrieve data. The package
+requires R version 4.1.0 or newer.
 
 ## Installation
 
-You can install the development version of RiksbankenAPIProject from
-[GitHub](https://github.com/) with:
+Install the package from GitHub. Setting `build_vignettes = TRUE`
+includes the tutorial in the installed package.
 
 ``` r
-# install.packages("pak")
-pak::pak("HBeijer/RiksbankenAPIProject")
+# install.packages("remotes")
+
+remotes::install_github(
+  "HBeijer/RiksbankenAPIProject",
+  build_vignettes = TRUE
+)
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Load the package and find available series:
 
 ``` r
 library(RiksbankenAPIProject)
-## basic example code
+
+series <- available_series()
+head(series)
+#>     series_id             description
+#> 1 SECBREPOEFF             Policy rate
+#> 2 SECBDEPOEFF            Deposit rate
+#> 3 SECBLENDEFF            Lending rate
+#> 4 SECBLIKVEFF Liquidity facility rate
+#> 5 SECBMARGEFF           Marginal rate
+#> 6  SECBREFEFF          Reference rate
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+The returned table contains `series_id` and `description`. Use a series
+identifier to download its observations.
+
+For example, retrieve the Swedish policy rate (`SECBREPOEFF`) during
+September 2026:
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+observations <- riksbanken_serie(
+  ts = "SECBREPOEFF",
+  from = "2026-09-01",
+  to = "2026-09-30"
+)
+
+head(observations)
+#>         date value
+#> 1 2026-09-01  1.75
+#> 2 2026-09-02  1.75
+#> 3 2026-09-03  1.75
+#> 4 2026-09-04  1.75
+#> 5 2026-09-07  1.75
+#> 6 2026-09-08  1.75
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
+The result is a data frame containing a `date` column of class `Date`
+and a numeric `value` column.
 
-You can also embed plots, for example:
+Dates can be supplied as character strings in `YYYY-MM-DD` format or as
+`Date` objects.
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
+## Documentation
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+Open the help pages for the functions:
+
+``` r
+?available_series
+?riksbanken_serie
+```
+
+For a tutorial with explanations and examples, open the vignette:
+
+``` r
+browseVignettes(package = "RiksbankenAPIProject")
+```
+
+## Authors
+
+Thai Pham and Hampus Beijer.
+
+## License
+
+MIT. See [LICENSE.md](LICENSE.md) for details.
