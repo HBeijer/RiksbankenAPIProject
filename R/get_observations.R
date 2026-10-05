@@ -1,3 +1,29 @@
+#' Retrieve observations for a Riksbank series
+#'
+#' Download observations for one series and a specified date interval
+#' from the Riksbank SWEA API.
+#'
+#' @param ts A single series identifier, such as "SECBREPOEFF".
+#'   Leading and trailing whitespace is removed.
+#' @param from The start date, supplied as a Date object or a character
+#'   string in YYYY-MM-DD format. Defaults to "1900-01-01".
+#' @param to The end date, supplied as a Date object or a character
+#'   string in YYYY-MM-DD format. Defaults to the current date.
+#'   Must be later than or equal to from.
+#'
+#' @return A data frame containing a date column of class Date
+#'   and a numeric value column. If no observations are returned,
+#'   the result has zero rows.
+#'
+#' @examples
+#' observations <- riksbanken_serie(
+#'   "SECBREPOEFF",
+#'   from = "2026-01-01",
+#'   to = "2026-10-05"
+#' )
+#' head(observations)
+#'
+#' @export
 riksbanken_serie <- function(ts,
                              from = "1900-01-01",
                              to = Sys.Date()) {

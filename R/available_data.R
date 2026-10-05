@@ -1,3 +1,14 @@
+#' List available Riksbank series
+#'
+#' Retrieve identifiers and short descriptions of interest rate and exchange
+#' rate series from the Riksbank SWEA API.
+#'
+#' @return A data frame with character columns \code{series_id} and
+#'   \code{description}. An empty response returns a table with zero rows.
+#' @examples
+#' head(available_series())
+#'
+#' @export
 available_series <- function(){
 
   resp <- httr2::request("https://api.riksbank.se") |>

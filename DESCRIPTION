@@ -1,19 +1,24 @@
 Package: RiksbankenAPIProject
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Access Interest Rate and Exchange Rate Data from the Riksbank
 Version: 0.1.0
 Authors@R: c(
     person(
-      "Jane", "Doe",
-      email = "jane@example.com",
+      "Thai", "Pham",
+      email = "thaipham071967@gmail.com",
+      role = "aut"
+    ),
+    person(
+      "Hampus", "Beijer",
+      email = "hampus.beijer@outlook.com",
       role = c("aut", "cre")
     )
   )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
-License: What license is it under?
+Description: Retrieve interest rate and exchange rate data from the
+    Riksbank SWEA API. List available series, download observations
+    for specified date intervals, and visualize series using line plots.
+License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 URL: https://github.com/HBeijer/RiksbankenAPIProject
 BugReports: https://github.com/HBeijer/RiksbankenAPIProject/issues
 Imports: 
@@ -22,3 +27,6 @@ Imports:
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+RoxygenNote: 7.3.2
+Depends: 
+    R (>= 4.1.0)
