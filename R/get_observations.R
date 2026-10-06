@@ -69,10 +69,16 @@ riksbanken_serie <- function(ts,
     httr2::req_user_agent("732A94 lab") |>
     httr2::req_perform()
 
-  data <- httr2::resp_body_json(resp)
+  # Represent HTTP 204 as an empty list, otherwise parse the JSON.
+  if (httr2::resp_status(resp) == 204L) {
+    data <- list()
+  } else {
+    data <- httr2::resp_body_json(resp)
+  }
 
-  # Return a zero-row data frame with the expected column types when the API returns no observations.
+  # Handle either kind of successful empty response in one place.
   # We want to keep the output consistent because if length(data) == 0L, the function would just return NULL.
+  # Return a zero-row data frame with consistent column types when there are no observations.
   if (length(data) == 0L) return(data.frame(date = as.Date(character()), value = numeric()))
 
   df <- do.call(rbind, lapply(data, as.data.frame))

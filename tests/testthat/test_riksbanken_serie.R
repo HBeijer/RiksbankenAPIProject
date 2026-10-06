@@ -31,9 +31,7 @@ test_that("a fixed query returns the expected observation", {
   )
 
 test_that("a large query returns many observations", {
-  result <- riksbanken_serie("SECBREPOEFF",
-                             to = "2025-12-31")
-
+  result <- riksbanken_serie("SECBREPOEFF", to = "2025-12-31")
   expect_s3_class(result, "data.frame")
   expect_true(nrow(result) > 1000)
 })
