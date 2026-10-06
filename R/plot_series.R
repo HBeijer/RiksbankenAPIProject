@@ -1,8 +1,10 @@
-plot_series <- function(ts){
+plot_series <- function(ts,
+                        from = "1900-01-01",
+                        to = Sys.Date()){
 
   # Calling on the other function to take out the DF
   ts <- trimws(ts)
-  d <- riksbanken_serie(ts)
+  d <- riksbanken_serie(ts,from = from, to=to)
 
   # Picking out the possible names of the variables
   ts_name <- available_series()
