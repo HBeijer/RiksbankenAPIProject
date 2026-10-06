@@ -1,50 +1,84 @@
 policy_rate_status <- function(ts = "SECBREPOEFF") {
 
-  # I call the function to grab the timeseries of policy rate
+  # Grab the time series
   d <- riksbanken_serie(ts)
 
-  # CHANGE OF POLICY ###########################################################
-  # We are interested in knowing whetehr the policy has actually changed.
-  # we must first look in the difference between values to see if there is an
-  # actual difference
+  # Check that observations are available
+  if (nrow(d) == 0L) {
+    stop("No observations were found for this series and period.")
+  }
 
-  difference_between_values <- diff(d$value) !=0
+  # Check the values and dates
+  if (!is.numeric(d$value) || any(!is.finite(d$value))) {
+    stop("The series must contain numeric values without NA or Inf.")
+  }
+
+  d$date <- as.Date(d$date)
+
+  if (anyNA(d$date)) {
+    stop("The series contains missing or invalid dates.")
+  }
+
+  # Sort the observations from oldest to newest
+  d <- d[order(d$date), , drop = FALSE]
+
+  # CHANGE OF POLICY ##########################################################
+
+  difference_between_values <- diff(d$value) != 0
+
+  # Keep the first value as a starting point for comparisons
   changed <- c(TRUE, difference_between_values)
-  # then I save all the changed values
-  changes <- d[changed, ]
-
+  changes <- d[changed, , drop = FALSE]
 
   # CALCULATIONS OF THE POLICY #################################################
 
-  # I want to check the current value of the policy rate
   current_rate <- tail(d$value, 1)
+  latest_observation <- tail(d$date, 1)
 
-  # Then I need to find the last change in policy
-  latest <- tail(changes, 1)
+  # Handle cases where no change can be identified
+  if (nrow(changes) < 2L) {
 
-  # As I saved the latest changes in the policy rate, I can pick out the last one
-  # before it was changed
-  previous_rate <- changes$value[nrow(changes) - 1]
+    cat(
+      "Latest available information on the Swedish policy rate:\n",
+      "Observation date:", as.character(latest_observation), "\n",
+      "Policy rate:", current_rate, "%\n"
+    )
 
-  # FUNCTION TO SEE IF POLICY RATE HAS CHANGED #################################
+    if (nrow(d) == 1L) {
+      cat("Only one observation is available; changes cannot be assessed.\n")
+    } else {
+      cat(
+        "No change was observed between",
+        as.character(d$date[1]), "and",
+        as.character(latest_observation), ".\n"
+      )
+    }
 
-  # Before the function begins to see what the difference is I need to know if the
-  # the difference is negative, positive, or 0.
-  difference_in_policy_rate <- latest$value - previous_rate
-
-  # Then if differnce is positive I know it was increase, if its negative it increased, and 0 it remained the same
-  if (difference_in_policy_rate > 0){
-    direction_of_policy_rate <- "increased"
-  } else if (difference_in_policy_rate < 0){direction <- "decreased"} else{
-    direction_of_policy_rate <- "unchanged"
+    return(invisible(NULL))
   }
 
-  # PRINT THE RESULT
+  # Find the latest change and the value before it
+  latest <- tail(changes, 1)
+  previous_rate <- changes$value[nrow(changes) - 1L]
+
+  difference_in_policy_rate <- latest$value - previous_rate
+
+  # DIRECTION OF THE CHANGE ####################################################
+
+  if (difference_in_policy_rate > 0) {
+    direction_of_policy_rate <- "increased"
+  } else {
+    direction_of_policy_rate <- "decreased"
+  }
+
+  # PRINT THE RESULT ##########################################################
+
   cat(
-    "Current Information on the Swedish Policy Rate:","\n",
-    "Current policy rate is:", current_rate, "%\n",
-    "The Last change in policy was in:", as.character(latest$date), "\n",
-    "The policy rate has", direction,
+    "Latest available information on the Swedish policy rate:\n",
+    "Observation date:", as.character(latest_observation), "\n",
+    "Policy rate:", current_rate, "%\n",
+    "The last observed change was on:", as.character(latest$date), "\n",
+    "The policy rate", direction_of_policy_rate,
     "by", abs(difference_in_policy_rate), "percentage points.\n"
   )
 }
