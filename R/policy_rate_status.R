@@ -79,6 +79,6 @@ policy_rate_status <- function(ts = "SECBREPOEFF") {
     "Policy rate:", current_rate, "%\n",
     "The last observed change was on:", as.character(latest$date), "\n",
     "The policy rate", direction_of_policy_rate,
-    "by", abs(difference_in_policy_rate), "percentage points.\n"
+    "by", abs(difference_in_policy_rate)*100, "percentage points.\n"
   )
 }
