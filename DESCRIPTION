@@ -24,7 +24,8 @@ BugReports: https://github.com/HBeijer/RiksbankenAPIProject/issues
 Imports: 
   httr2,
   ggplot2,
-  rlang
+  rlang,
+  utils
 Suggests: 
     knitr,
     rmarkdown,
