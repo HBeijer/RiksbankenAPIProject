@@ -14,8 +14,6 @@ available_series <- function(){
   resp <- httr2::request("https://api.riksbank.se") |>
     httr2::req_url_path("swea", "v1", "Series") |>
     httr2::req_user_agent("732A94 lab") |>
-    # Reduce the frequency of API requests.
-    httr2::req_throttle(rate = 1 / 15) |> # requests per second
     # Retry temporary errors, with a 60-second fallback wait.
     httr2::req_retry(max_tries = 3, backoff = function(tries) 60) |>
     httr2::req_perform()
