@@ -1,12 +1,13 @@
 plot_series <- function(ts){
 
   # Calling on the other function to take out the DF
+  ts <- trimws(ts)
   d <- riksbanken_serie(ts)
 
   # Picking out the possible names of the variables
   ts_name <- available_series()
   # Checking what the name of the specific variable is
-  name <- ts_name$description[ts_name$series_id == "SECBREFEFF"]
+  name <- ts_name$description[ts_name$series_id == ts]
 
   # Plotting the ts
   plot <- ggplot2::ggplot(d) +
