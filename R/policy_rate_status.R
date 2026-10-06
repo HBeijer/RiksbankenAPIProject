@@ -1,4 +1,4 @@
-policy_rate_status <- function(ts = "SECBREFEFF") {
+policy_rate_status <- function(ts = "SECBREPOEFF") {
 
   # I call the function to grab the timeseries of policy rate
   d <- riksbanken_serie(ts)
