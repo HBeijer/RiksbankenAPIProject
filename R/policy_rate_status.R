@@ -32,8 +32,8 @@ policy_rate_status <- function(ts = "SECBREPOEFF") {
 
   # CALCULATIONS OF THE POLICY #################################################
 
-  current_rate <- tail(d$value, 1)
-  latest_observation <- tail(d$date, 1)
+  current_rate <- utils::tail(d$value, 1)
+  latest_observation <- utils::tail(d$date, 1)
 
   # Handle cases where no change can be identified
   if (nrow(changes) < 2L) {
@@ -58,7 +58,7 @@ policy_rate_status <- function(ts = "SECBREPOEFF") {
   }
 
   # Find the latest change and the value before it
-  latest <- tail(changes, 1)
+  latest <- utils::tail(changes, 1)
   previous_rate <- changes$value[nrow(changes) - 1L]
 
   difference_in_policy_rate <- latest$value - previous_rate
