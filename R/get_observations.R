@@ -67,6 +67,10 @@ riksbanken_serie <- function(ts,
                         as.character(from),
                         as.character(to)) |>
     httr2::req_user_agent("732A94 lab") |>
+    # Reduce the frequency of API requests.
+    httr2::req_throttle(rate = 1 / 15) |> # requests per second
+    # Retry temporary errors, with a 60-second fallback wait.
+    httr2::req_retry(max_tries = 3, backoff = function(tries) 60) |>
     httr2::req_perform()
 
   # Represent HTTP 204 as an empty list, otherwise parse the JSON.
