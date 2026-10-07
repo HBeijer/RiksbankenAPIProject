@@ -90,6 +90,22 @@ For a tutorial with explanations and examples, open the vignette:
 browseVignettes(package = "RiksbankenAPIProject")
 ```
 
+
+## Shiny application
+
+Explore the data interactively with our
+[RiksbankenShiny app](https://github.com/HBeijer/RiksbankenShiny).
+
+After installing this package, install Shiny if needed and launch the app:
+
+```{r shiny-app, eval = FALSE}
+# install.packages("shiny")
+shiny::runGitHub("RiksbankenShiny", "HBeijer")
+```
+
+Select a series and date interval, then click **Fetch data**
+to display the plot and observations.
+
 ## Authors
 
 Thai Pham and Hampus Beijer.
