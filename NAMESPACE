@@ -2,5 +2,6 @@
 
 export(available_series)
 export(plot_series)
+export(policy_rate_status)
 export(riksbanken_serie)
 importFrom(rlang,.data)

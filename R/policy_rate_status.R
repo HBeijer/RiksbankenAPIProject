@@ -1,3 +1,22 @@
+#' Display the current policy rate and its latest observed change
+#'
+#' @description
+#' Prints the latest available policy rate and observation date.
+#' If a change is found in the retrieved data, also prints its date,
+#' direction, and size in percentage points.
+#'
+#' @param ts A single character string specifying the series ID.
+#'   Defaults to "SECBREPOEFF", the Swedish policy rate series.
+#'
+#' @return Invisibly returns NULL. A summary is printed to the console.
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' policy_rate_status()
+#' }
+#'
 policy_rate_status <- function(ts = "SECBREPOEFF") {
 
   # Grab the time series
